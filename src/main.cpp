@@ -11,6 +11,7 @@
 #include <string>
 #include "auth/auth.hpp"
 #include "user/user.hpp"
+#include "todo/todo.hpp"
 
 enum class MenuOpt { Login, Register, Exit };
 
@@ -36,6 +37,14 @@ int main() {
         }
     }
 
+    Todo todolist {user};
+    TodoItem item1 {"Task 1", "Complete"};
+    system("read");
+    todolist.addTodo(&item1);
+    system("read");
+    todolist.removeTodo(&item1, 0);
+
+
     pqxx::work txn{Database::conn};
     for (auto [username, password] :
          txn.query<std::string, std::string>("SELECT * FROM accounts")) {
@@ -46,7 +55,7 @@ int main() {
 
     system("read");
 
-    auth->deleteUser(user);
+    /* auth->deleteUser(user); */
 
     return 0;
 }

@@ -22,7 +22,8 @@ project(todo)
 add_executable(
   ${PROJECT_NAME}
   ${PROJECT_SOURCE_DIR}/src/main.cpp ${PROJECT_SOURCE_DIR}/src/user/user.cpp
-  ${PROJECT_SOURCE_DIR}/src/auth/auth.cpp)
+  ${PROJECT_SOURCE_DIR}/src/auth/auth.cpp
+  ${PROJECT_SOURCE_DIR}/src/todo/todo.cpp)
 
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 
