@@ -11,7 +11,7 @@ class Auth {
 public:
     inline static bool isAuthenticated { false };
 
-    void registerUser(User* user) const;
-    void loginUser(User* user) const;
-    void deleteUser(User* user) const;
+    static void registerUser(UserObj& user);
+    static void loginUser(UserObj& user);
+    static void deleteUser(UserObj& user);
 };

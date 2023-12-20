@@ -5,7 +5,7 @@
 #include "pqxx/pqxx"
 #include "user/user.hpp"
 
-Todo::Todo(User* user) {
+Todo::Todo(UserObj& user) {
     pqxx::work txn{Database::conn};
     for (auto [title, status] : txn.query<std::string, std::string>(
              "SELECT * FROM todos WHERE user = '" + user->getUsername() +

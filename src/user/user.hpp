@@ -1,7 +1,9 @@
 #pragma once
 
 #include <string>
+#include <memory>
 #include <string_view>
+
 
 class User {
    public:
@@ -20,3 +22,4 @@ class User {
     std::string username_{};
     std::string password_{};
 };
+using UserObj = std::unique_ptr<User>;

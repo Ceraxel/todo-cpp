@@ -16,12 +16,12 @@
 enum class MenuOpt { Login, Register, Exit };
 
 MenuOpt getUserChoice();
-void inputCredentials(User* User, const std::string& type);
+void inputCredentials(UserObj& User, const std::string& type);
 
 int main() {
     std::unique_ptr<Auth> auth = std::make_unique<Auth>();
-    User* user = new User();
-    while (!Auth::isAuthenticated) {
+    UserObj user = std::make_unique<User>();
+    /* while (!Auth::isAuthenticated) { */
         switch (getUserChoice()) {
             case MenuOpt::Login:
                 inputCredentials(user, std::string("LOGIN"));
@@ -29,13 +29,12 @@ int main() {
                 break;
             case MenuOpt::Register:
                 inputCredentials(user, std::string("REGISTER"));
-                auth->registerUser(user);
                 break;
             case MenuOpt::Exit:
             default:
                 exit(0);
         }
-    }
+    /* } */
 
     Todo todolist {user};
     TodoItem item1 {"Task 1", "Complete"};
@@ -87,7 +86,7 @@ MenuOpt getUserChoice() {
         return MenuOpt::Exit;
 }
 
-void inputCredentials(User* User, const std::string& type) {
+void inputCredentials(UserObj& User, const std::string& type) {
     using namespace ftxui;
     auto screen = ScreenInteractive::Fullscreen();
 
@@ -101,9 +100,17 @@ void inputCredentials(User* User, const std::string& type) {
     Component input_password = Input(&password, "password", password_option);
 
     std::vector<std::string> entries{"Submit", "Cancel"};
-    int selected = 1;
+    int selected = 0;
     MenuOption option;
-    option.on_enter = screen.ExitLoopClosure();
+    option.on_enter = [&] {
+        if (selected != 0)
+            return screen.ExitLoopClosure()();
+        User->setUsername(username);
+        User->setPassword(password);
+        if (type.compare(std::string("REGISTER")) == 0)
+            Auth::registerUser(User);
+        return screen.ExitLoopClosure()();
+    };
     auto menu = Menu(&entries, &selected, option);
 
     auto component =
@@ -122,9 +129,4 @@ void inputCredentials(User* User, const std::string& type) {
     });
 
     screen.Loop(renderer);
-    if (selected != 0)
-        return;
-
-    User->setUsername(username);
-    User->setPassword(password);
 }

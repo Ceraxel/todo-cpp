@@ -19,7 +19,7 @@ class TodoItem {
 
 class Todo {
    public:
-    Todo(User* user);
+    Todo(UserObj& user);
     void addTodo(TodoItem* item);
     void removeTodo(TodoItem* item, int idx);
 
