@@ -18,7 +18,8 @@ void Auth::loginUser(UserObj& user) {
     pqxx::work txn {Database::conn};
     pqxx::result res {txn.exec("SELECT * FROM accounts WHERE username = '" + user->getUsername() + "' AND password = '" + user->getPassword() + "'")};
     if (!res.empty()) {
-        Auth::isAuthenticated = true;
+        Session::user = user->getUsername();
+        Session::isAuthenticated = true;
     }
 }
 

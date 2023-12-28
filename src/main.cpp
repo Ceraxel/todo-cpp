@@ -10,39 +10,31 @@
 #include <memory>
 #include <string>
 #include "auth/auth.hpp"
-#include "user/user.hpp"
 #include "todo/todo.hpp"
+#include "user/user.hpp"
 
-enum class MenuOpt { Login, Register, Exit };
+enum class AuthOpt { Login, Register, Exit };
 
-MenuOpt getUserChoice();
-void inputCredentials(UserObj& User, const std::string& type);
+AuthOpt getUserChoice();
+void inputCredentials(const AuthOpt opt);
 
 int main() {
     std::unique_ptr<Auth> auth = std::make_unique<Auth>();
-    UserObj user = std::make_unique<User>();
-    /* while (!Auth::isAuthenticated) { */
-        switch (getUserChoice()) {
-            case MenuOpt::Login:
-                inputCredentials(user, std::string("LOGIN"));
-                auth->loginUser(user);
-                break;
-            case MenuOpt::Register:
-                inputCredentials(user, std::string("REGISTER"));
-                break;
-            case MenuOpt::Exit:
-            default:
-                exit(0);
-        }
-    /* } */
+    while (!Session::isAuthenticated) {
+    switch (getUserChoice()) {
+        case AuthOpt::Login:
+            inputCredentials(AuthOpt::Login);
+            break;
+        case AuthOpt::Register:
+            inputCredentials(AuthOpt::Register);
+            break;
+        case AuthOpt::Exit:
+        default:
+            exit(0);
+    }
+    }
 
-    Todo todolist {user};
-    TodoItem item1 {"Task 1", "Complete"};
-    system("read");
-    todolist.addTodo(&item1);
-    system("read");
-    todolist.removeTodo(&item1, 0);
-
+    std::cout << "Is auth: " << Session::isAuthenticated << '\n';
 
     pqxx::work txn{Database::conn};
     for (auto [username, password] :
@@ -54,12 +46,10 @@ int main() {
 
     system("read");
 
-    /* auth->deleteUser(user); */
-
     return 0;
 }
 
-MenuOpt getUserChoice() {
+AuthOpt getUserChoice() {
     using namespace ftxui;
     auto screen = ScreenInteractive::Fullscreen();
 
@@ -79,14 +69,16 @@ MenuOpt getUserChoice() {
     screen.Loop(render);
 
     if (selected == 0)
-        return MenuOpt::Login;
+        return AuthOpt::Login;
     else if (selected == 1)
-        return MenuOpt::Register;
+        return AuthOpt::Register;
     else
-        return MenuOpt::Exit;
+        return AuthOpt::Exit;
 }
 
-void inputCredentials(UserObj& User, const std::string& type) {
+void inputCredentials(AuthOpt opt) {
+    UserObj user = std::make_unique<User>();
+    std::string selected_opt{opt == AuthOpt::Login ? "LOGIN" : "REGISTER"};
     using namespace ftxui;
     auto screen = ScreenInteractive::Fullscreen();
 
@@ -105,10 +97,12 @@ void inputCredentials(UserObj& User, const std::string& type) {
     option.on_enter = [&] {
         if (selected != 0)
             return screen.ExitLoopClosure()();
-        User->setUsername(username);
-        User->setPassword(password);
-        if (type.compare(std::string("REGISTER")) == 0)
-            Auth::registerUser(User);
+        user->setUsername(username);
+        user->setPassword(password);
+        if (opt == AuthOpt::Login)
+            Auth::loginUser(user);
+        if (opt == AuthOpt::Register)
+            Auth::registerUser(user);
         return screen.ExitLoopClosure()();
     };
     auto menu = Menu(&entries, &selected, option);
@@ -118,7 +112,7 @@ void inputCredentials(UserObj& User, const std::string& type) {
     component = component | center;
     auto renderer = Renderer(component, [&] {
         return window(
-                   text(type) | hcenter | bold,
+                   text(selected_opt) | hcenter | bold,
                    vbox({
                        hbox(text(" Username   : "), input_username->Render()),
                        hbox(text(" Password   : "), input_password->Render()),
