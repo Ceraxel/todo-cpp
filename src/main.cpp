@@ -2,8 +2,13 @@
 #include <string>
 #include "auth.hpp"
 #include "todo.hpp"
+#include "database.hpp"
 
-int main() {
+int main(int argc, char* argv[]) {
+    if (strcmp(argv[1], "--create-table")) {
+        Database db;
+        db.create_table();
+    }
 
     authenticate();
 

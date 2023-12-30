@@ -7,11 +7,6 @@ AuthOpt getAuthOpt();
 std::optional<User> inputCredentials(AuthOpt opt);
 void authenticate();
 
-class Database {
-   public:
-    inline static pqxx::connection conn{
-        "dbname=project user=postgres password=postgres hostaddr="};
-};
 
 class Auth {
    public:

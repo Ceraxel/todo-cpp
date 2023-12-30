@@ -1,9 +1,9 @@
 #include "todo.hpp"
 #include <iostream>
 #include <string>
-#include "auth.hpp"
 #include "pqxx/pqxx"
 #include "user.hpp"
+#include "database.hpp"
 
 Todo::Todo(User* user) {
     pqxx::work txn{Database::conn};

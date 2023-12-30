@@ -9,6 +9,7 @@
 #include <pqxx/pqxx>
 #include "auth.hpp"
 #include "user.hpp"
+#include "database.hpp"
 
 void Auth::registerUser(User* user) {
     pqxx::work txn{Database::conn};
