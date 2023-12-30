@@ -1,11 +1,11 @@
 #include "todo.hpp"
 #include <iostream>
 #include <string>
-#include "auth/auth.hpp"
+#include "auth.hpp"
 #include "pqxx/pqxx"
-#include "user/user.hpp"
+#include "user.hpp"
 
-Todo::Todo(UserObj& user) {
+Todo::Todo(User* user) {
     pqxx::work txn{Database::conn};
     for (auto [title, status] : txn.query<std::string, std::string>(
              "SELECT * FROM todos WHERE user = '" + user->getUsername() +

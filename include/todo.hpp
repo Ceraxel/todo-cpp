@@ -2,7 +2,7 @@
 #include <string>
 #include <string_view>
 #include "pqxx/pqxx"
-#include "user/user.hpp"
+#include "user.hpp"
 
 class TodoItem {
    public:
@@ -19,7 +19,7 @@ class TodoItem {
 
 class Todo {
    public:
-    Todo(UserObj& user);
+    Todo(User* user);
     void addTodo(TodoItem* item);
     void removeTodo(TodoItem* item, int idx);
 

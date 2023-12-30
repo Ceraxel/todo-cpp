@@ -1,14 +1,13 @@
 #pragma once
 
 #include <string>
-#include <memory>
 #include <string_view>
 
 
 class User {
    public:
     User() = default;
-    User(std::string_view username, std::string_view password)
+    User(std::string username, std::string password)
         : username_{username}, password_{password} {}
     
     std::string getUsername() const;
@@ -22,4 +21,3 @@ class User {
     std::string username_{};
     std::string password_{};
 };
-using UserObj = std::unique_ptr<User>;

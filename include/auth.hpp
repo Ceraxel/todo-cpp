@@ -1,6 +1,11 @@
 #pragma once
 #include <pqxx/pqxx>
-#include "user/user.hpp"
+#include "user.hpp"
+
+enum class AuthOpt { Login, Register, Exit };
+AuthOpt getAuthOpt();
+std::optional<User> inputCredentials(AuthOpt opt);
+void authenticate();
 
 class Database {
    public:
@@ -11,9 +16,9 @@ class Database {
 class Auth {
    public:
 
-    static void registerUser(UserObj& user);
-    static void loginUser(UserObj& user);
-    static void deleteUser(UserObj& user);
+    static void registerUser(User* user);
+    static void loginUser(User* user);
+    static void deleteUser(User* user);
 };
 
 class Session {
