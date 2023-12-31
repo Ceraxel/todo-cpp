@@ -2,7 +2,6 @@
 #include <string>
 #include <string_view>
 #include "pqxx/pqxx"
-#include "user.hpp"
 
 class TodoItem {
    public:
@@ -19,9 +18,10 @@ class TodoItem {
 
 class Todo {
    public:
-    Todo(User* user);
+    Todo();
     void add_todo(TodoItem* item);
-    void remove_todo(TodoItem* item, int idx);
+    void remove_todo(TodoItem* item);
+    std::list<TodoItem>& get_todos();
 
 
    private:
