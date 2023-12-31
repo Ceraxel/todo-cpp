@@ -1,16 +1,16 @@
 #include "user.hpp"
 #include <string>
 
-std::string User::getUsername() const {
+std::string User::get_username() const {
     return username_;
 }
-std::string User::getPassword() const {
+std::string User::get_password() const {
     return password_;
 }
 
-void User::setUsername(std::string_view username) {
+void User::set_username(std::string_view username) {
     username_ = username;
 };
-void User::setPassword(std::string_view password) {
+void User::set_password(std::string_view password) {
     password_ = password;
 };

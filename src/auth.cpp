@@ -11,42 +11,42 @@
 #include "user.hpp"
 #include "database.hpp"
 
-void Auth::registerUser(User* user) {
+void Auth::register_user(User* user) {
     pqxx::work txn{Database::conn};
-    txn.exec("INSERT INTO accounts VALUES ('" + user->getUsername() + "', '" +
-             user->getPassword() + "')");
+    txn.exec("INSERT INTO accounts VALUES ('" + user->get_username() + "', '" +
+             user->get_password() + "')");
     txn.commit();
 }
 
-void Auth::deleteUser(User* user) {
+void Auth::delete_user(User* user) {
     pqxx::work txn{Database::conn};
-    txn.exec("DELETE FROM accounts WHERE username = '" + user->getUsername() +
+    txn.exec("DELETE FROM accounts WHERE username = '" + user->get_username() +
              "'");
     txn.commit();
 };
 
-void Auth::loginUser(User* user) {
+void Auth::login_user(User* user) {
     pqxx::work txn{Database::conn};
     pqxx::result res{txn.exec("SELECT * FROM accounts WHERE username = '" +
-                              user->getUsername() + "' AND password = '" +
-                              user->getPassword() + "'")};
+                              user->get_username() + "' AND password = '" +
+                              user->get_password() + "'")};
     if (!res.empty()) {
-        Session::user = user->getUsername();
-        Session::isAuthenticated = true;
+        Session::user = user->get_username();
+        Session::is_authenticated = true;
     }
 }
 
 void authenticate() {
     std::optional<User> acc{};
-    while (!Session::isAuthenticated) {
+    while (!Session::is_authenticated) {
         switch (getAuthOpt()) {
             case AuthOpt::Login:
                 acc = inputCredentials(AuthOpt::Login);
-                Auth::loginUser(&acc.value());
+                Auth::login_user(&acc.value());
                 break;
             case AuthOpt::Register:
                 acc = inputCredentials(AuthOpt::Register);
-                Auth::registerUser(&acc.value());
+                Auth::register_user(&acc.value());
                 break;
             case AuthOpt::Exit:
             default:

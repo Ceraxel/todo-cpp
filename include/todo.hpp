@@ -9,8 +9,8 @@ class TodoItem {
     TodoItem(std::string_view title, std::string_view status)
         : title_{title}, status_{status} {}
 
-    std::string getTitle() const { return title_; }
-    std::string getStatus() const { return status_; }
+    std::string get_title() const { return title_; }
+    std::string get_status() const { return status_; }
 
    private:
     std::string title_{};
@@ -20,10 +20,10 @@ class TodoItem {
 class Todo {
    public:
     Todo(User* user);
-    void addTodo(TodoItem* item);
-    void removeTodo(TodoItem* item, int idx);
+    void add_todo(TodoItem* item);
+    void remove_todo(TodoItem* item, int idx);
 
 
    private:
-    std::list<TodoItem> todoList_;
+    std::list<TodoItem> todo_list_;
 };

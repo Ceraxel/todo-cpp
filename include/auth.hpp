@@ -11,15 +11,15 @@ void authenticate();
 class Auth {
    public:
 
-    static void registerUser(User* user);
-    static void loginUser(User* user);
-    static void deleteUser(User* user);
+    static void register_user(User* user);
+    static void login_user(User* user);
+    static void delete_user(User* user);
 };
 
 class Session {
 public:
     inline static std::string user{};
-    inline static bool isAuthenticated{false};
-    static void setUser(std::string_view authUser) { user = authUser; }
-    static std::string& getUser() { return user; };
+    inline static bool is_authenticated{false};
+    static void set_user(std::string_view authUser) { user = authUser; }
+    static std::string& get_user() { return user; };
 };

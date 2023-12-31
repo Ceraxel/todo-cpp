@@ -10,11 +10,11 @@ class User {
     User(std::string username, std::string password)
         : username_{username}, password_{password} {}
     
-    std::string getUsername() const;
-    std::string getPassword() const;
+    std::string get_username() const;
+    std::string get_password() const;
 
-    void setUsername(std::string_view username);
-    void setPassword(std::string_view password);
+    void set_username(std::string_view username);
+    void set_password(std::string_view password);
 
 
    private:
