@@ -39,8 +39,8 @@ void Todo::run() {
     display_todo(title_list, status_list);
 }
 
-void Todo::display_todo(std::vector<std::string> title_list,
-                        ftxui::Elements status_list) {
+void Todo::display_todo(const std::vector<std::string> title_list,
+                        const ftxui::Elements status_list) {
     using namespace ftxui;
 
     auto screen = ScreenInteractive::Fullscreen();
@@ -95,14 +95,14 @@ void Todo::add_todo_form() {
     text_area = text_area | border | hcenter | size(WIDTH, GREATER_THAN, 50);
 
     std::vector<std::string> entries = {"Ok", "Cancel"};
-    int selected{};
+    int selected;
     MenuOption menuOption;
     menuOption.on_enter = screen.ExitLoopClosure();
     Component action_menu = Menu(&entries, &selected, menuOption);
     action_menu = action_menu | center | bold;
 
     std::vector<std::string> status_list{"ONGOING", "COMPLETED"};
-    int selected_status{};
+    int selected_status;
     auto status_menu = Radiobox(&status_list, &selected_status) | center;
     auto layout = Container::Vertical({text_area, status_menu, action_menu}) |
                   border | hcenter;
@@ -181,7 +181,7 @@ void Todo::update_todo(TodoItem* item, int status) {
               << " Title: " << item->get_title();
     txn.exec("UPDATE todos SET status = '" + task_status + "' WHERE title = '" +
              item->get_title() + "';");
-    /* txn.commit(); */
+    txn.commit();
 }
 
 void Todo::remove_todo(TodoItem* item) {
